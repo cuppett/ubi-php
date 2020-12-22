@@ -3,8 +3,8 @@ FROM registry.access.redhat.com/ubi8/php-73
 USER 0
 
 RUN set -ex; \
-    dnf -y module reset nodejs; \
-    dnf -y module enable nodejs:14; \
+    dnf -y module reset nodejs nginx; \
+    dnf -y module enable nodejs:14 nginx:1.18; \
     dnf -y update; \
     dnf -y install php-devel php-pecl-zip; \
     dnf -y clean all; \
