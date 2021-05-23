@@ -14,7 +14,7 @@ RUN set -ex; \
 RUN set -ex; \
     cd /tmp; \
     : =====igbinary ===== ;\
-    wget https://pecl.php.net/get/igbinary-3.2.2.tgz; \
+    wget --no-check-certificate https://pecl.php.net/get/igbinary-3.2.2.tgz; \
     tar -zxf igbinary-*.tgz; \
     rm igbinary-*.tgz; \
     cd igbinary-*; \
@@ -24,7 +24,7 @@ RUN set -ex; \
     echo -e "; Enable igbinary extension module\nextension = igbinary.so" > /etc/php.d/40-igbinary.ini; \
     cd ..; \
     : ===== msgpack ===== ;\
-    wget https://pecl.php.net/get/msgpack-2.1.2.tgz; \
+    wget --no-check-certificate https://pecl.php.net/get/msgpack-2.1.2.tgz; \
     tar -zxf msgpack-*.tgz; \
     rm msgpack-*.tgz; \
     cd msgpack-*; \
@@ -34,7 +34,7 @@ RUN set -ex; \
     echo -e "; Enable msgpack extension module\nextension = msgpack.so" > /etc/php.d/40-msgpack.ini; \
     cd ..; \
     : ===== redis ===== ;\
-    wget https://pecl.php.net/get/redis-5.3.4.tgz; \
+    wget --no-check-certificate https://pecl.php.net/get/redis-5.3.4.tgz; \
     tar -zxf redis-*.tgz; \
     rm redis-*.tgz; \
     cd redis-*; \
