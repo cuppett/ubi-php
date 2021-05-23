@@ -3,9 +3,8 @@ FROM registry.access.redhat.com/ubi8/php-74
 USER 0
 
 RUN set -ex; \
-    dnf -y module reset nodejs nginx; \
-    dnf -y module enable nodejs:14 nginx:1.18; \
-    dnf -y update; \
+    dnf -y module reset nginx; \
+    dnf -y module install nginx:1.18; \
     dnf -y install php-devel php-pecl-zip; \
     dnf -y clean all; \
     rm -rf /var/cache/dnf
