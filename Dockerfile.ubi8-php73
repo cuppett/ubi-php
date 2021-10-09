@@ -6,6 +6,7 @@ RUN set -ex; \
     dnf -y module reset nginx; \
     dnf -y module install nginx:1.18; \
     dnf -y install php-devel php-pecl-zip; \
+    dnf -y update; \
     dnf -y clean all; \
     rm -rf /var/cache/dnf
 
