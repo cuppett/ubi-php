@@ -16,7 +16,7 @@ RUN set -ex; \
 RUN set -ex; \
     cd /tmp; \
     : =====igbinary ===== ;\
-    wget --no-check-certificate https://pecl.php.net/get/igbinary-3.2.2.tgz; \
+    wget --no-check-certificate https://pecl.php.net/get/igbinary-3.2.6.tgz; \
     tar -zxf igbinary-*.tgz; \
     rm igbinary-*.tgz; \
     cd igbinary-*; \
