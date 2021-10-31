@@ -8,7 +8,8 @@ RUN set -ex; \
     dnf -y install php-devel php-pecl-zip; \
     dnf -y update; \
     dnf -y clean all; \
-    rm -rf /var/cache/dnf
+    rm -rf /var/cache/dnf; \ 
+    chmod ug+w -fR /etc/httpd;
 
 # Install redis for PHP session handling and common caching
 # https://github.com/phpredis/phpredis/blob/develop/INSTALL.markdown
