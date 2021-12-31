@@ -18,7 +18,7 @@ spec:
       from:
         kind: ImageStreamTag
         name: 'ubi8-php:74'
-      dockerfilePath: Dockerfile.ubi8-php74
+      dockerfilePath: Containerfile
       imageOptimizationPolicy: SkipLayers
   postCommit: {}
   source:
