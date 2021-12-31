@@ -36,7 +36,7 @@ RUN set -ex; \
     echo -e "; Enable msgpack extension module\nextension = msgpack.so" > /etc/php.d/40-msgpack.ini; \
     cd ..; \
     : ===== redis ===== ;\
-    wget --no-check-certificate https://pecl.php.net/get/redis-5.3.4.tgz; \
+    wget --no-check-certificate https://pecl.php.net/get/redis-5.3.5.tgz; \
     tar -zxf redis-*.tgz; \
     rm redis-*.tgz; \
     cd redis-*; \
