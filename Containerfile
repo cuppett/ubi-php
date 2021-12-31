@@ -6,10 +6,8 @@ RUN set -ex; \
     dnf -y module reset nginx; \
     dnf -y module install nginx:1.18; \
     dnf -y install php-devel php-pecl-zip; \
-    dnf -y update; \
     dnf -y clean all; \
-    rm -rf /var/cache/dnf; \ 
-    chmod ug+w -fR /etc/httpd;
+    rm -rf /var/cache/dnf;
 
 # Install redis for PHP session handling and common caching
 # https://github.com/phpredis/phpredis/blob/develop/INSTALL.markdown
