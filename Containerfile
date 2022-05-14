@@ -12,9 +12,9 @@ RUN set -ex; \
 # Install redis for PHP session handling and common caching
 # https://github.com/phpredis/phpredis/blob/develop/INSTALL.markdown
 RUN set -ex; \
-    cd /tmp; \#$
+    cd /tmp; \
     : =====igbinary ===== ;\
-    wget --no-check-certificate https://pecl.php.net/get/igbinary-3.2.6.tgz; \
+    wget --no-check-certificate https://pecl.php.net/get/igbinary-3.2.7.tgz; \
     tar -zxf igbinary-*.tgz; \
     rm igbinary-*.tgz; \
     cd igbinary-*; \
