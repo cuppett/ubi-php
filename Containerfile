@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/php-74
+FROM registry.access.redhat.com/ubi8/php-80
 
 USER 0
 
@@ -12,7 +12,7 @@ RUN set -ex; \
 # Install redis for PHP session handling and common caching
 # https://github.com/phpredis/phpredis/blob/develop/INSTALL.markdown
 RUN set -ex; \
-    cd /tmp; \
+    cd /tmp; \#$
     : =====igbinary ===== ;\
     wget --no-check-certificate https://pecl.php.net/get/igbinary-3.2.6.tgz; \
     tar -zxf igbinary-*.tgz; \
