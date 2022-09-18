@@ -6,5 +6,6 @@ outside the default & official repositories available within the distribution.
 
 ## Images Available:
 
+ * quay.io/cuppett/ubi9-php:80
  * quay.io/cuppett/ubi8-php:80
  * quay.io/cuppett/ubi8-php:74
