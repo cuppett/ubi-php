@@ -24,6 +24,7 @@ spec:
     type: Git
     git:
       uri: 'https://github.com/cuppett/ubi-php'
+      ref: main
   triggers:
   - type: ImageChange
     imageChange: {}
