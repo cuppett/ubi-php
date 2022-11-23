@@ -1,0 +1,8 @@
+resources:
+- ../openshift
+
+patchesStrategicMerge:
+- patches/buildconfig_ubi9-php81.yaml
+- patches/buildconfig_ubi9-php80.yaml
+- patches/buildconfig_ubi8-php80.yaml
+- patches/buildconfig_ubi8-php74.yaml

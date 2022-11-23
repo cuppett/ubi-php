@@ -1,0 +1,11 @@
+kind: BuildConfig
+apiVersion: build.openshift.io/v1
+metadata:
+  name: ubi8-php74
+spec:
+  output:
+    to:
+      kind: DockerImage
+      name: 'quay.io/cuppett/ubi-php:74-ubi8'
+    pushSecret:
+      name: cuppett-sno1-pull-secret
