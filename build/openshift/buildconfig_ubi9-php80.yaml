@@ -1,0 +1,31 @@
+kind: BuildConfig
+apiVersion: build.openshift.io/v1
+metadata:
+  name: ubi9-php80
+spec:
+  output:
+    to:
+      kind: ImageStreamTag
+      name: 'php:8.0-ubi9'
+  resources: {}
+  successfulBuildsHistoryLimit: 5
+  failedBuildsHistoryLimit: 5
+  strategy:
+    type: Docker
+    dockerStrategy:
+      from:
+        kind: ImageStreamTag
+        name: 'php:8.0-ubi9'
+        namespace: openshift
+      dockerfilePath: Containerfile.ubi9
+      imageOptimizationPolicy: SkipLayers
+  postCommit: {}
+  source:
+    type: Git
+    git:
+      uri: 'https://github.com/cuppett/ubi-php'
+  triggers:
+  - type: ImageChange
+    imageChange: {}
+  - type: ConfigChange
+  runPolicy: Serial

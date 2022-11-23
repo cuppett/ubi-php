@@ -1,0 +1,16 @@
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  name: php
+spec:
+  lookupPolicy:
+    local: true
+  tags:
+    - from:
+        kind: DockerImage
+        name: registry.redhat.io/ubi9/php-81:latest
+      importPolicy:
+        scheduled: true
+      name: 8.1-ubi9-redhat
+      referencePolicy:
+        type: Local

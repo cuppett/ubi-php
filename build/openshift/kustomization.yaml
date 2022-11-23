@@ -1,0 +1,9 @@
+# Adds namespace to all resources.
+namespace: ubi-php
+
+resources:
+  - imagestream.yaml
+  - buildconfig_ubi8-php74.yaml
+  - buildconfig_ubi8-php80.yaml
+  - buildconfig_ubi9-php80.yaml
+  - buildconfig_ubi9-php81.yaml
