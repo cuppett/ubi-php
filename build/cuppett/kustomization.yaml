@@ -6,3 +6,29 @@ patchesStrategicMerge:
 - patches/buildconfig_ubi9-php80.yaml
 - patches/buildconfig_ubi8-php80.yaml
 - patches/buildconfig_ubi8-php74.yaml
+
+patchesJson6902:
+- target:
+    group: build.openshift.io
+    version: v1
+    kind: BuildConfig
+    name: ubi9-php81
+  path: json/add-github-trigger.yaml
+- target:
+    group: build.openshift.io
+    version: v1
+    kind: BuildConfig
+    name: ubi9-php80
+  path: json/add-github-trigger.yaml
+- target:
+    group: build.openshift.io
+    version: v1
+    kind: BuildConfig
+    name: ubi8-php80
+  path: json/add-github-trigger.yaml
+- target:
+    group: build.openshift.io
+    version: v1
+    kind: BuildConfig
+    name: ubi8-php74
+  path: json/add-github-trigger.yaml

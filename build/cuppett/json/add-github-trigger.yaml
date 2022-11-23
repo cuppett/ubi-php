@@ -1,0 +1,7 @@
+- op: add
+  path: "/spec/triggers/-"
+  value:
+    type: GitHub
+    github:
+      secretReference:
+        name: github-trigger
