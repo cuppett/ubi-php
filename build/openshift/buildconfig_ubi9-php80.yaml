@@ -15,8 +15,7 @@ spec:
     dockerStrategy:
       from:
         kind: ImageStreamTag
-        name: 'php:8.0-ubi9'
-        namespace: openshift
+        name: 'php:8.0-ubi9-redhat'
       dockerfilePath: Containerfile.ubi9
       imageOptimizationPolicy: SkipLayers
   postCommit: {}
