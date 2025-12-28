@@ -3,6 +3,8 @@ apiVersion: build.openshift.io/v1
 metadata:
   name: ubi9-php83
 spec:
+  nodeSelector:
+    kubernetes.io/arch: amd64
   output:
     to:
       kind: DockerImage
