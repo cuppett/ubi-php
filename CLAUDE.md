@@ -12,12 +12,11 @@ This project builds enhanced PHP container images based on Red Hat UBI (Universa
 
 ### Container Image Variants
 
-Four container images are built, each combining a UBI version with a PHP version:
+Three container images are built, each combining a UBI version with a PHP version:
 
-- **UBI8 + PHP 7.4** (Containerfile.ubi8, BuildConfig: ubi8-php74)
-- **UBI8 + PHP 8.0** (Containerfile.ubi8, BuildConfig: ubi8-php80)
-- **UBI9 + PHP 8.0** (Containerfile.ubi9, BuildConfig: ubi9-php80)
-- **UBI9 + PHP 8.1** (Containerfile.ubi9, BuildConfig: ubi9-php81)
+- **UBI8 + PHP 8.2** (Containerfile.ubi8, BuildConfig: ubi8-php82)
+- **UBI9 + PHP 8.3** (Containerfile.ubi9, BuildConfig: ubi9-php83)
+- **UBI10 + PHP 8.3** (Containerfile.ubi10, BuildConfig: ubi10-php83)
 
 ### Build Configuration Structure
 
@@ -46,8 +45,9 @@ Extension load order via INI files:
 
 - **Containerfile.ubi8**: Includes `dnf -y module reset nginx` and `dnf -y module install nginx:1.20` before installing PHP packages
 - **Containerfile.ubi9**: Skips nginx module operations (not needed on UBI9)
+- **Containerfile.ubi10**: Follows the same pattern as UBI9 (no nginx module operations needed)
 
-Both follow the same pattern: install php-devel and php-pecl-zip, compile extensions, switch back to USER 1001.
+All follow the same pattern: install php-devel and php-pecl-zip, compile extensions, switch back to USER 1001.
 
 ## Common Development Commands
 
@@ -104,11 +104,12 @@ Edit the wget URLs in both Containerfiles to point to new PECL versions:
 
 ### Adding a New PHP/UBI Combination
 
-1. Create new BuildConfig in `build/openshift/buildconfig_ubiX-phpYY.yaml`
-2. Reference appropriate base image tag in ImageStream
-3. Add BuildConfig to `build/openshift/kustomization.yaml` resources list
-4. Create corresponding patch files in `build/cuppett/patches/`
-5. Add JSON patch for GitHub trigger in `build/cuppett/kustomization.yaml`
+1. Create new Containerfile if needed: `Containerfile.ubiX` (if UBI version doesn't exist)
+2. Create new BuildConfig in `build/openshift/buildconfig_ubiX-phpYY.yaml`
+3. Add appropriate base image tag to `build/openshift/imagestream.yaml`
+4. Add BuildConfig to `build/openshift/kustomization.yaml` resources list
+5. Create corresponding patch file in `build/cuppett/patches/buildconfig_ubiX-phpYY.yaml`
+6. Add strategic merge patch and JSON patch entries in `build/cuppett/kustomization.yaml`
 
 ### Customizing for Your Own Registry
 
@@ -130,10 +131,9 @@ Create your own Kustomize overlay similar to `build/cuppett/`:
 ## Pre-built Images
 
 Public images are available on quay.io (x86_64 only):
-- `quay.io/cuppett/ubi-php:81-ubi9`
-- `quay.io/cuppett/ubi-php:80-ubi9`
-- `quay.io/cuppett/ubi-php:80-ubi8`
-- `quay.io/cuppett/ubi-php:74-ubi8`
+- `quay.io/cuppett/ubi-php:83-ubi10`
+- `quay.io/cuppett/ubi-php:83-ubi9`
+- `quay.io/cuppett/ubi-php:82-ubi8`
 
 ## Project Scope
 

@@ -1,11 +1,11 @@
 kind: BuildConfig
 apiVersion: build.openshift.io/v1
 metadata:
-  name: ubi9-php81
+  name: ubi10-php83
 spec:
   output:
     to:
       kind: DockerImage
-      name: 'quay.io/cuppett/ubi-php:81-ubi9'
+      name: 'quay.io/cuppett/ubi-php:83-ubi10'
     pushSecret:
-      name: cuppett-sno1-pull-secret
+      name: quay-push-secret

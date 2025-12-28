@@ -1,12 +1,12 @@
 kind: BuildConfig
 apiVersion: build.openshift.io/v1
 metadata:
-  name: ubi9-php81
+  name: ubi9-php83
 spec:
   output:
     to:
       kind: ImageStreamTag
-      name: 'php:8.1-ubi9'
+      name: 'php:8.3-ubi9'
   resources: {}
   successfulBuildsHistoryLimit: 5
   failedBuildsHistoryLimit: 5
@@ -15,7 +15,7 @@ spec:
     dockerStrategy:
       from:
         kind: ImageStreamTag
-        name: 'php:8.1-ubi9-redhat'
+        name: 'php:8.3-ubi9-redhat'
       dockerfilePath: Containerfile.ubi9
       imageOptimizationPolicy: SkipLayers
   postCommit: {}

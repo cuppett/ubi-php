@@ -2,8 +2,8 @@
 namespace: ubi-php
 
 resources:
+  - namespace.yaml
   - imagestream.yaml
-  - buildconfig_ubi8-php74.yaml
-  - buildconfig_ubi8-php80.yaml
-  - buildconfig_ubi9-php80.yaml
-  - buildconfig_ubi9-php81.yaml
+  - buildconfig_ubi8-php82.yaml
+  - buildconfig_ubi9-php83.yaml
+  - buildconfig_ubi10-php83.yaml

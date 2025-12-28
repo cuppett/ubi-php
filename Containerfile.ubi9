@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi9/php-80
+FROM registry.redhat.io/ubi9/php-83
 
 USER 0
 
@@ -32,7 +32,7 @@ RUN set -ex; \
     make -j4 && make install; \
     echo -e "; Enable msgpack extension module\nextension = msgpack.so" > /etc/php.d/40-msgpack.ini; \
     cd ..; \
-    : ===== redis ===== ;\
+    : ===== redis - needs igbinary headers ===== ;\
     wget --no-check-certificate https://pecl.php.net/get/redis-5.3.7.tgz; \
     tar -zxf redis-*.tgz; \
     rm redis-*.tgz; \
@@ -41,8 +41,8 @@ RUN set -ex; \
     ./configure --enable-redis-igbinary --enable-redis-msgpack --enable-redis-lzf; \
     make -j4 && make install; \
     echo -e "; Enable redis extension module\nextension = redis.so" > /etc/php.d/50-redis.ini; \
-    cd ..; \
     : ===== cleanup ===== ;\
+    cd /tmp; \
     rm -fR redis* igbinary* msgpack*
 
 USER 1001

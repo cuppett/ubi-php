@@ -1,10 +1,8 @@
-FROM registry.redhat.io/ubi8/php-82
+FROM registry.redhat.io/ubi10/php-83
 
 USER 0
 
 RUN set -ex; \
-    dnf -y module reset nginx; \
-    dnf -y module install nginx:1.20; \
     dnf -y update; \
     dnf -y install php-devel php-pecl-zip; \
     dnf -y clean all; \

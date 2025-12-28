@@ -16,7 +16,6 @@ $ oc apply -k build/openshift
 
 A set of images are available here (for x86_64):
 
-* quay.io/cuppett/ubi-php:81-ubi9
-* quay.io/cuppett/ubi-php:80-ubi9
-* quay.io/cuppett/ubi-php:80-ubi8
-* quay.io/cuppett/ubi-php:74-ubi8
+* quay.io/cuppett/ubi-php:83-ubi10
+* quay.io/cuppett/ubi-php:83-ubi9
+* quay.io/cuppett/ubi-php:82-ubi8

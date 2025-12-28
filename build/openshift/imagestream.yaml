@@ -8,33 +8,25 @@ spec:
   tags:
     - from:
         kind: DockerImage
-        name: registry.redhat.io/ubi9/php-81:latest
+        name: registry.redhat.io/ubi10/php-83:latest
       importPolicy:
         scheduled: true
-      name: 8.1-ubi9-redhat
+      name: 8.3-ubi10-redhat
       referencePolicy:
         type: Local
     - from:
         kind: DockerImage
-        name: registry.redhat.io/ubi9/php-80:latest
+        name: registry.redhat.io/ubi9/php-83:latest
       importPolicy:
         scheduled: true
-      name: 8.0-ubi9-redhat
+      name: 8.3-ubi9-redhat
       referencePolicy:
         type: Local
     - from:
         kind: DockerImage
-        name: registry.redhat.io/ubi8/php-80:latest
+        name: registry.redhat.io/ubi8/php-82:latest
       importPolicy:
         scheduled: true
-      name: 8.0-ubi8-redhat
-      referencePolicy:
-        type: Local
-    - from:
-        kind: DockerImage
-        name: registry.redhat.io/ubi8/php-74:latest
-      importPolicy:
-        scheduled: true
-      name: 7.4-ubi8-redhat
+      name: 8.2-ubi8-redhat
       referencePolicy:
         type: Local
