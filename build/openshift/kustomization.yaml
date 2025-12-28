@@ -7,3 +7,7 @@ resources:
   - buildconfig_ubi8-php82.yaml
   - buildconfig_ubi9-php83.yaml
   - buildconfig_ubi10-php83.yaml
+  - serviceaccount.yaml
+  - role.yaml
+  - rolebinding.yaml
+  - cronjob.yaml

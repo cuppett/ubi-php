@@ -93,3 +93,48 @@ To manually trigger a build:
 ```bash
 oc start-build ubi8-php82 -n ubi-php
 ```
+
+## Scheduled Builds
+
+A CronJob is included to automatically trigger monthly builds of all images. This ensures images stay up-to-date with security patches from `dnf update` in the Containerfiles.
+
+**Schedule:** 1st of every month at midnight UTC
+
+**What it does:** Triggers builds for all three images:
+- `ubi8-php82`
+- `ubi9-php83`
+- `ubi10-php83`
+
+**Resources created:**
+- ServiceAccount: `build-scheduler`
+- Role: `build-starter` (permissions to start builds)
+- RoleBinding: `build-scheduler-binding`
+- CronJob: `monthly-build-trigger`
+
+### Testing the Scheduled Build
+
+To test the CronJob without waiting for the schedule:
+
+```bash
+# Create a Job from the CronJob
+oc create job --from=cronjob/monthly-build-trigger test-build-trigger -n ubi-php
+
+# Watch the job
+oc get jobs -n ubi-php -w
+
+# Check the logs
+oc logs job/test-build-trigger -n ubi-php
+
+# Clean up test job
+oc delete job test-build-trigger -n ubi-php
+```
+
+### Viewing CronJob Status
+
+```bash
+# View CronJob details
+oc get cronjob monthly-build-trigger -n ubi-php
+
+# View recent Job executions
+oc get jobs -n ubi-php -l cronjob=monthly-build-trigger
+```

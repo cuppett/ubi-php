@@ -28,6 +28,20 @@ The project uses **Kustomize** for configuration management with two layers:
    - Add GitHub webhook triggers for automated builds
    - Configure pull secrets for registry authentication
 
+### Scheduled Builds
+
+A **CronJob** automatically triggers monthly builds to keep images updated with security patches:
+
+- **Schedule**: 1st of every month at midnight UTC (`0 0 1 * *`)
+- **Triggers**: All three BuildConfigs (ubi8-php82, ubi9-php83, ubi10-php83)
+- **RBAC Resources**:
+  - ServiceAccount: `build-scheduler`
+  - Role: `build-starter` (grants `buildconfigs/instantiate` permissions)
+  - RoleBinding: `build-scheduler-binding`
+  - CronJob: `monthly-build-trigger`
+
+The CronJob uses `registry.redhat.io/openshift4/ose-cli:latest` to execute `oc start-build` commands.
+
 ### PHP Extensions Built from Source
 
 All Containerfiles compile three PECL extensions from source:

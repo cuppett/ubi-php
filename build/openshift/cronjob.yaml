@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: monthly-build-trigger
+spec:
+  schedule: "0 0 1 * *"  # 1st of every month at midnight UTC
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: build-scheduler
+          restartPolicy: OnFailure
+          containers:
+          - name: build-starter
+            image: registry.redhat.io/openshift4/ose-cli:latest
+            command:
+            - /bin/bash
+            - -c
+            - |
+              set -e
+              echo "Starting monthly builds..."
+              oc start-build ubi8-php82 -n ubi-php
+              oc start-build ubi9-php83 -n ubi-php
+              oc start-build ubi10-php83 -n ubi-php
+              echo "All builds triggered successfully"
