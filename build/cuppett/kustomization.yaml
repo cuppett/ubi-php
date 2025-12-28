@@ -1,5 +1,7 @@
 resources:
 - ../openshift
+- role-webhook.yaml
+- rolebinding-webhook.yaml
 
 patchesStrategicMerge:
 - patches/buildconfig_ubi8-php82.yaml

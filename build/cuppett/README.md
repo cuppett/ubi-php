@@ -17,28 +17,46 @@ This applies the base configuration from `build/openshift/` with the following c
 
 ## GitHub Webhook Setup
 
-The BuildConfigs are configured with GitHub webhook triggers. When you push to the main branch, OpenShift will automatically trigger builds.
+The BuildConfigs are configured with GitHub webhook triggers. When you push to the main branch, OpenShift will automatically trigger builds for **all three images** (ubi8-php82, ubi9-php83, ubi10-php83).
 
 ### Prerequisites
 
 - OpenShift CLI (`oc`) configured and logged in
 - GitHub CLI (`gh`) installed and authenticated
 - Push access to the GitHub repository
+- Cluster admin permissions (for RBAC setup)
 
-### Step 1: Get the Webhook URL
+### Step 1: Configure RBAC for Webhooks
 
-Get the webhook URL template from any BuildConfig:
+Webhooks need permissions to trigger builds. The base configuration includes RBAC resources that allow unauthenticated webhook access:
+
+- `role-webhook.yaml` - Grants permissions to create buildconfigs/webhooks
+- `rolebinding-webhook.yaml` - Binds the role to unauthenticated and authenticated users
+
+These are automatically applied when you deploy with `oc apply -k build/cuppett/`.
+
+**Verify RBAC is configured:**
+```bash
+oc get role webhook-trigger -n ubi-php
+oc get rolebinding webhook-trigger-binding -n ubi-php
+```
+
+### Step 2: Get the Webhook URLs
+
+You'll need the webhook URL for each BuildConfig. Get them with:
 
 ```bash
-oc describe bc/ubi8-php82 -n ubi-php | grep -A 3 "Webhook GitHub"
+oc describe bc/ubi8-php82 -n ubi-php | grep -A 1 "Webhook GitHub"
+oc describe bc/ubi9-php83 -n ubi-php | grep -A 1 "Webhook GitHub"
+oc describe bc/ubi10-php83 -n ubi-php | grep -A 1 "Webhook GitHub"
 ```
 
-You'll see a URL like:
+You'll see URLs like:
 ```
-https://api.<cluster-domain>/apis/build.openshift.io/v1/namespaces/ubi-php/buildconfigs/ubi8-php82/webhooks/<secret>/github
+https://api.<cluster-domain>/apis/build.openshift.io/v1/namespaces/ubi-php/buildconfigs/<buildconfig-name>/webhooks/<secret>/github
 ```
 
-### Step 2: Create the Webhook Secret
+### Step 3: Create the Webhook Secret
 
 Generate a random secret and create it in OpenShift:
 
@@ -55,14 +73,15 @@ oc create secret generic github-trigger \
 
 **Important:** Save the `$WEBHOOK_SECRET` value - you'll need it for the next step.
 
-### Step 3: Create the GitHub Webhook
+### Step 4: Create GitHub Webhooks for All BuildConfigs
 
-Replace `<secret>` in the webhook URL with your generated secret, then create the webhook using GitHub CLI:
+**Important:** You need to create **three separate webhooks** - one for each BuildConfig.
 
-**Using JSON payload (recommended):**
+Replace `<cluster-domain>` with your actual cluster domain and `$WEBHOOK_SECRET` with your secret, then create all three webhooks:
 
+**Create webhook for ubi8-php82:**
 ```bash
-cat > /tmp/webhook.json <<EOF
+cat > /tmp/webhook-ubi8.json <<EOF
 {
   "name": "web",
   "active": true,
@@ -75,7 +94,43 @@ cat > /tmp/webhook.json <<EOF
 }
 EOF
 
-gh api repos/cuppett/ubi-php/hooks --method POST --input /tmp/webhook.json
+gh api repos/cuppett/ubi-php/hooks --method POST --input /tmp/webhook-ubi8.json
+```
+
+**Create webhook for ubi9-php83:**
+```bash
+cat > /tmp/webhook-ubi9.json <<EOF
+{
+  "name": "web",
+  "active": true,
+  "events": ["push"],
+  "config": {
+    "url": "https://api.<cluster-domain>/apis/build.openshift.io/v1/namespaces/ubi-php/buildconfigs/ubi9-php83/webhooks/$WEBHOOK_SECRET/github",
+    "content_type": "json",
+    "secret": "$WEBHOOK_SECRET"
+  }
+}
+EOF
+
+gh api repos/cuppett/ubi-php/hooks --method POST --input /tmp/webhook-ubi9.json
+```
+
+**Create webhook for ubi10-php83:**
+```bash
+cat > /tmp/webhook-ubi10.json <<EOF
+{
+  "name": "web",
+  "active": true,
+  "events": ["push"],
+  "config": {
+    "url": "https://api.<cluster-domain>/apis/build.openshift.io/v1/namespaces/ubi-php/buildconfigs/ubi10-php83/webhooks/$WEBHOOK_SECRET/github",
+    "content_type": "json",
+    "secret": "$WEBHOOK_SECRET"
+  }
+}
+EOF
+
+gh api repos/cuppett/ubi-php/hooks --method POST --input /tmp/webhook-ubi10.json
 ```
 
 **Alternative: Manual Setup via GitHub Web UI**
@@ -90,19 +145,18 @@ gh api repos/cuppett/ubi-php/hooks --method POST --input /tmp/webhook.json
    - **Active**: Checked
 4. Click "Add webhook"
 
-### Step 4: Verify the Webhook
+### Step 5: Verify the Webhooks
 
-Check that the webhook was created:
+Check that all three webhooks were created:
 
 ```bash
 # List all webhooks
-gh api repos/cuppett/ubi-php/hooks | jq -r '.[] | {id, active, events}'
-
-# Get details of a specific webhook (use the ID from above)
-gh api repos/cuppett/ubi-php/hooks/<webhook-id>
+gh api repos/cuppett/ubi-php/hooks | jq -r '.[] | {id, active, events, url: .config.url}'
 ```
 
-### Step 5: Test the Webhook
+You should see three webhooks with URLs pointing to each BuildConfig.
+
+### Step 6: Test the Webhooks
 
 Push a commit to the main branch and verify builds are triggered:
 
@@ -122,24 +176,35 @@ If builds aren't triggering automatically:
    - Go to Settings → Webhooks → Click on your webhook
    - Check "Recent Deliveries" tab for errors
 
-2. **Verify the secret exists** in OpenShift:
+2. **Verify RBAC is configured** (403 Forbidden errors):
    ```bash
-   oc get secret github-trigger -n ubi-php
+   oc get role webhook-trigger -n ubi-php
+   oc get rolebinding webhook-trigger-binding -n ubi-php
    ```
 
-3. **Check BuildConfig trigger configuration**:
+   If missing, redeploy: `oc apply -k build/cuppett/`
+
+3. **Verify the secret exists** in OpenShift:
+   ```bash
+   oc get secret github-trigger -n ubi-php
+   oc get secret github-trigger -n ubi-php -o jsonpath='{.data.WebHookSecretKey}' | base64 -d
+   ```
+
+4. **Check BuildConfig trigger configuration**:
    ```bash
    oc get bc/ubi8-php82 -n ubi-php -o yaml | grep -A 10 triggers
    ```
 
-4. **Test webhook manually** using curl:
+5. **Test webhook manually** using curl:
    ```bash
-   curl -X POST \
+   curl -s -X POST \
      -H "Content-Type: application/json" \
      -H "X-GitHub-Event: push" \
-     --data '{"ref":"refs/heads/main"}' \
-     "https://api.<cluster-domain>/apis/build.openshift.io/v1/namespaces/ubi-php/buildconfigs/ubi8-php82/webhooks/$WEBHOOK_SECRET/github"
+     -d '{"ref":"refs/heads/main","repository":{"full_name":"cuppett/ubi-php"}}' \
+     "https://api.<cluster-domain>/apis/build.openshift.io/v1/namespaces/ubi-php/buildconfigs/ubi8-php82/webhooks/$WEBHOOK_SECRET/github" | jq -r '.kind, .metadata.name'
    ```
+
+   Should return: `Build` and a build name like `ubi8-php82-9`
 
 ## Required Secrets
 
