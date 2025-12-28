@@ -12,6 +12,18 @@ RUN set -ex; \
     dnf -y clean all; \
     rm -rf /var/cache/dnf;
 
+# Configure Apache mod_remoteip for proper client IP handling behind proxies
+# https://httpd.apache.org/docs/2.4/mod/mod_remoteip.html
+RUN { \
+        echo 'RemoteIPHeader X-Forwarded-For'; \
+        echo '# Trust proxy IPs from private networks (Kubernetes/OpenShift)'; \
+        echo 'RemoteIPTrustedProxy 10.0.0.0/8'; \
+        echo 'RemoteIPTrustedProxy 172.16.0.0/12'; \
+        echo 'RemoteIPTrustedProxy 192.168.0.0/16'; \
+        echo 'RemoteIPTrustedProxy 169.254.0.0/16'; \
+        echo 'RemoteIPTrustedProxy 127.0.0.0/8'; \
+    } > /etc/httpd/conf.d/remoteip.conf
+
 # Install redis for PHP session handling and common caching
 # https://github.com/phpredis/phpredis/blob/develop/INSTALL.markdown
 RUN set -ex; \
