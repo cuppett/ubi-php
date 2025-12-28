@@ -32,9 +32,9 @@ The project uses **Kustomize** for configuration management with two layers:
 
 All Containerfiles compile three PECL extensions from source:
 
-1. **igbinary** (v3.2.12): Binary serialization format
-2. **msgpack** (v2.1.2): MessagePack serialization library
-3. **redis** (v5.3.7): Redis PHP extension with igbinary, msgpack, and lzf support
+1. **igbinary** (v3.2.16): Binary serialization format
+2. **msgpack** (v3.0.0): MessagePack serialization library
+3. **redis** (v6.3.0): Redis PHP extension with igbinary, msgpack, and lzf support
 
 Extension load order via INI files:
 - `40-igbinary.ini` (loads first)
