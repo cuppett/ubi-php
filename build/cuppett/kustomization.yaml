@@ -3,27 +3,27 @@ resources:
 - role-webhook.yaml
 - rolebinding-webhook.yaml
 
-patchesStrategicMerge:
-- patches/buildconfig_ubi8-php82.yaml
-- patches/buildconfig_ubi9-php83.yaml
-- patches/buildconfig_ubi10-php83.yaml
-
-patchesJson6902:
-- target:
-    group: build.openshift.io
-    version: v1
-    kind: BuildConfig
-    name: ubi8-php82
-  path: json/add-github-trigger.yaml
-- target:
-    group: build.openshift.io
-    version: v1
-    kind: BuildConfig
-    name: ubi9-php83
-  path: json/add-github-trigger.yaml
-- target:
-    group: build.openshift.io
-    version: v1
-    kind: BuildConfig
-    name: ubi10-php83
-  path: json/add-github-trigger.yaml
+patches:
+  # Strategic merge patches
+  - path: patches/buildconfig_ubi8-php82.yaml
+  - path: patches/buildconfig_ubi9-php83.yaml
+  - path: patches/buildconfig_ubi10-php83.yaml
+  # JSON patches for GitHub triggers
+  - target:
+      group: build.openshift.io
+      version: v1
+      kind: BuildConfig
+      name: ubi8-php82
+    path: json/add-github-trigger.yaml
+  - target:
+      group: build.openshift.io
+      version: v1
+      kind: BuildConfig
+      name: ubi9-php83
+    path: json/add-github-trigger.yaml
+  - target:
+      group: build.openshift.io
+      version: v1
+      kind: BuildConfig
+      name: ubi10-php83
+    path: json/add-github-trigger.yaml
